@@ -1,0 +1,12 @@
+torch==1.5.1
+numpy
+scipy
+librosa
+tensorboardX==1.1
+Unidecode
+nltk
+tqdm
+gdown
+soundfile
+py7zr
+syllables

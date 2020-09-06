@@ -1,0 +1,4 @@
+#!/bin/bash
+
+specialization="$1"
+docker build --build-arg SPECIALIZATION="$specialization" --pull -t synthflow-${specialization} .

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cid="$(docker ps --filter ancestor=synthflow:latest -q)"
+docker exec -u root -it $@ $cid bash

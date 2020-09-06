@@ -1,0 +1,37 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[packages]
+pipenv = "*"
+
+apache-airflow = "*"
+"apache-airflow[postgres]" = "*"
+
+ipython = "*"
+jupyterlab = "*"
+ipywidgets = "*"
+
+mypy = "*"
+pytest = "*"
+pytest-cov = "*"
+
+praatio = "*"
+librosa = "*"
+pysoundfile = "*"
+nltk = "*"
+praat-parselmouth = "*"
+
+numpy = "*"
+pandas = "*"
+tqdm = "*"
+cython = "*"
+lark-parser = "*"
+fastparquet = "*"
+
+psycopg2 = "*"
+sqlalchemy = "*"
+
+[pipenv]
+allow_prereleases = true
