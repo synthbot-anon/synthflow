@@ -8,5 +8,6 @@ docker run --rm \
 	--publish "127.0.0.1:8880:5432" \
 	--publish "127.0.0.1:8881:8080" \
 	--hostname "synthflow" \
-	-it synthflow-"$specialization" bash --init-file /data/scripts/root-on-start.sh
+  --name "synthflow-$specialization" \
+	-it synthflow-"$specialization" bash --init-file /data/src/synthflow/scripts/root-on-start.sh
 

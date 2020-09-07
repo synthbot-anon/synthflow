@@ -1,4 +1,5 @@
 #!/bin/bash
 
-cid="$(docker ps --filter ancestor=synthflow:latest -q)"
+specialization="$1"
+cid="$(docker ps --filter name="synthflow-$specialization" -q)"
 docker exec -u root -it $@ $cid bash
