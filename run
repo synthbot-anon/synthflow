@@ -3,7 +3,7 @@
 specialization="$1"
 
 docker run --rm \
-  --gpus 2 \
+  --gpus all \
   --runtime=nvidia \
   --mount "type=bind,src=$(pwd)/run-data,dst=/data" \
 	--publish "127.0.0.1:8880:5432" \

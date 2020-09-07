@@ -1,0 +1,3 @@
+[submodule "build-data/spec/cookie/nvidia-apex"]
+	path = build-data/spec/cookie/nvidia-apex
+	url = https://github.com/NVIDIA/apex.git
