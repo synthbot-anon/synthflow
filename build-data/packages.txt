@@ -1,3 +1,4 @@
+git
 postgresql
 postgresql-plpython3-12
 libgfortran5

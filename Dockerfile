@@ -13,7 +13,7 @@ COPY ./build-data/requirements.txt /tmp/requirements.txt
 COPY ./build-data/post-setup.sh /tmp/post-setup.sh
 
 # Install all baseline packages
-RUN sh -c '/tmp/preinstall.sh'
+RUN /tmp/preinstall.sh
 RUN apt-get update && \
   apt-get install -y --no-install-recommends $(cat /tmp/packages.txt)
 RUN pip3 install -r /tmp/requirements.txt
@@ -22,9 +22,10 @@ RUN pip3 install -r /tmp/requirements.txt
 COPY ./build-data/mfa /opt/mfa
 
 # Install any extra packages for specialization
-COPY /build-data/specialization/${SPECIALIZATION}/ /tmp/specialization/
-RUN apt-get install -y --no-install-recommends $(cat /tmp/specialization/packages.txt)
-RUN pip3 install -r /tmp/specialization/requirements.txt
+COPY /build-data/spec/${SPECIALIZATION}/ /tmp/spec/
+RUN /tmp/spec/preinstall.sh
+RUN apt-get install -y --no-install-recommends $(cat /tmp/spec/packages.txt)
+RUN pip3 install -r /tmp/spec/requirements.txt
 
 # Set up user celestia
 RUN adduser --disabled-password --gecos "" celestia
