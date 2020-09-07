@@ -5,7 +5,6 @@ rm /data/airflow/airflow-scheduler.pid
 rm /data/airflow/airflow-webserver.pid
 airflow initdb
 psql airflow -f /data/src/synthflow/scripts/db-triggers.psql
-clear
 
 echo -e "\e[1;31m"
 cat<<TF

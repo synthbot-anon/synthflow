@@ -4,9 +4,11 @@ specialization="$1"
 
 docker run --rm \
   --gpus 2 \
+  --runtime=nvidia \
   --mount "type=bind,src=$(pwd)/run-data,dst=/data" \
 	--publish "127.0.0.1:8880:5432" \
 	--publish "127.0.0.1:8881:8080" \
+	--publish "127.0.0.1:8888:8888" \
 	--hostname "synthflow" \
   --name "synthflow-$specialization" \
 	-it synthflow-"$specialization" bash --init-file /data/src/synthflow/scripts/root-on-start.sh

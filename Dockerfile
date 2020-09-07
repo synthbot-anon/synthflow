@@ -1,4 +1,4 @@
-from python:latest
+from nvidia/cuda:latest
 
 # Default value for what additional setup to perform
 ARG SPECIALIZATION="synthbot"
