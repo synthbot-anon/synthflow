@@ -19,7 +19,7 @@ The entire `run-data` directory will be available in the workspace in `/data`. O
 
 This is the expected workflow for creating a custom workspace:
 1. Move your code to `run-data/src/RepoNameGoesHere`.
-2. Copy the files from `run-data/src/template` into your repository. This should add a `container` directory in your repo.
+2. Copy the files from `run-data/src/synthflow/template` into your repository. This should add a `container` directory in your repo.
 3. Modify the newly-created files to specify what packages you want and what scripts you want to run before installation.
 4. Run `./build RepoNameGoesHere`.
 
