@@ -66,14 +66,14 @@ You can persist files by sharing them with the containers you run. Here's an exa
 * `echo world > shared/hello` (put a file in there for demonstration purposes)
 * `docker run --rm -it --mount "type=bind,src=$(pwd)/shared,dst=/data" ubuntu:latest` (run the container with the `shared` host folder mounted onto the container `/data` folder.
 * `cat /data/hello` (check the contents of `/data/hello` in the container, which should return `world`)
-* `echo 'a cute' > /data/sunset` (write something to `/data/sunset`)
+* `echo 'acute' > /data/sunset` (write something to `/data/sunset`)
 * `exit` (close out the container)
 * `cat shared/sunset` (verify that the new contents are still available on the host)
 
 ### Creating new container images
 One of the nice things about containers is that you can modify the environment, then save the result as a new container image. We can play around in one container:
 * `docker run --rm -it ubuntu:latest`
-* `echo 'a cute' > /sunset`
+* `echo 'acute' > /sunset`
 
 Now while this container is running, open a separate shell and run the following:
 * `docker container ls` (this will list the running containers alongside the container id)
