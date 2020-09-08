@@ -1,5 +1,4 @@
-Cloning: `git clone https://github.com/synthbot-anon/synthflow.git`
-
+# Introduction
 This project is part of the Please Please Pleese-get-a-life Foundation (PPP). It's intended to help organize our development efforts and make it easier for anons to replicate our work.
 
 If you're not familiar with Docker, please read the sections below in this order:
