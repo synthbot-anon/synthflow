@@ -1,7 +1,5 @@
 #!/bin/bash
 
-specialization="$1"
-
 docker run --rm \
   --gpus all \
   --runtime=nvidia \
@@ -10,6 +8,7 @@ docker run --rm \
 	--publish "127.0.0.1:8881:8080" \
 	--publish "127.0.0.1:8888:8888" \
 	--hostname "synthflow" \
-  --name "synthflow-$specialization" \
-	-it synthflow-"$specialization" bash --init-file /data/src/synthflow/scripts/root-on-start.sh
+  --name "synthflow" \
+  -u root \
+	-it synthflow bash --init-file /data/src/synthflow/scripts/root-on-start.sh
 

@@ -1,4 +1,4 @@
 #!/bin/bash
 
-specialization="$1"
-docker build --build-arg SPECIALIZATION="$specialization" --pull -t synthflow-${specialization} .
+rsync -ra --links --delete run-data/src/"$1"/container/ build-data/spec/
+docker build --build-arg SPECIALIZATION="$1" --pull -t synthflow .

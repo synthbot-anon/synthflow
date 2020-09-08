@@ -1,10 +1,11 @@
 #!/bin/bash
 
 source ~/.bashrc
-rm /data/airflow/airflow-scheduler.pid
-rm /data/airflow/airflow-webserver.pid
+rm /data/airflow/airflow-scheduler.pid || true
+rm /data/airflow/airflow-webserver.pid || true
 airflow initdb
 psql airflow -f /data/src/synthflow/scripts/db-triggers.psql
+clear -x
 
 echo -e "\e[1;31m"
 cat<<TF

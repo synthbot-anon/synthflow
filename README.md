@@ -1,6 +1,6 @@
 Cloning: `git clone --recursive https://github.com/synthbot-anon/synthflow.git`
 
-This project is part of the Please Please Please-get-a-life-foundation (PPP). It's intended to help organize our development efforts and make it easier for anons to replicate our work.
+This project is part of the Please Please Pleese-get-a-life Foundation (PPP). It's intended to help organize our development efforts and make it easier for anons to replicate our work.
 
 If you're not familiar with Docker, please read the sections below in this order:
 1. *What can containers do*
@@ -12,7 +12,7 @@ If you're not familiar with Docker, please read the sections below in this order
 This is the expected workflow for replicating someone's workspace:
 1. Follow the installation steps below to set up Docker and CUDA.
 2. Clone this repository (`git clone --recursive https://github.com/synthbot-anon/synthflow.git`).
-3. Clone any target code into `run-data/src/` (e.g., `git clone --recursive https://github.com/CookiePPP/cookietts.git run-data/src/cookietts`)
+3. Clone any target code into `run-data/src/` (e.g., `git clone --recursive https://github.com/CookiePPP/cookietts.git run-data/src/cookietts run-data/src`)
 4. Run `./run WorkspaceNameGoesHere`
 
 The entire `run-data` directory will be available in the workspace in `/data`. Once this workspace is running, you can run the scripts in `utils/` to get a new shell, get a root shell, start a Jupyter notebook server, and start an AirFlow server. See the *What does SynthFlow do* section below.
