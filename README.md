@@ -77,7 +77,7 @@ You can persist files by sharing them with the containers you run. Here's an exa
 * `cat shared/sunset` (verify that the new contents are still available on the host)
 
 ### Creating new container images
-Once of the nice things about containers is that you can modify the environment, then save the result as a new container image. We can play around in one container:
+One of the nice things about containers is that you can modify the environment, then save the result as a new container image. We can play around in one container:
 * `docker run --rm -it ubuntu:latest`
 * `echo 'a cute' > /sunset`
 
@@ -86,7 +86,7 @@ Now while this container is running, open a separate shell and run the following
 * `docker commit PasteContainerIdHere sunset:latest` (create a new container image called sunset:latest)
 
 You can close out the first container now, then run:
-* `docker run -rm -it sunset:latest` (run the new image you just created)
+* `docker run --rm -it sunset:latest` (run the new image you just created)
 * `cat /sunset` (make sure your commited changes are still there)
 * `exit`
 
