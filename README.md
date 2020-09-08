@@ -65,7 +65,7 @@ Try running these commands in the shell that's now inside the `ubuntu:latest` co
 * `ls` (command not found, since you just deleted it)
 * `exit` (leave the main shell, thus closing the container)
 * `docker run --rm -it ubuntu:latest` (start the container again)
-* `ls /`) (the command works again, and everything is back to its clean state)
+* `ls /` (the command works again, and everything is back to its clean state)
 
 You can persist files by sharing them with the containers you run. Here's an example:
 * `mkdir shared` (optional: create the directory you want to share and give it any name)
@@ -115,12 +115,12 @@ All of my container build scripts follow this general pattern:
 # 3. Setting up CUDA in Docker
 NOTE: This section is written for Linux users. I don't know how to get this working in Windows yet. If someone wants to write an explanation, please do. See https://developer.nvidia.com/blog/announcing-cuda-on-windows-subsystem-for-linux-2/ for details.
 
-Your operating system runs as several components. The kernel is the "core" of the operating system. It defines how processes interact, how resources are shared between processes, and how hardware is exposed to processes. There's a bunch of other crud that's bundled into an "operating system" like your default packages, init scripts, daemons, configuration files, and so on. Containers try to replicate everything EXCEPT the kernel. When you run a container, it effectively a kernel with your host.
+Your operating system runs as several components. The kernel is the "core" of the operating system. It defines how processes interact, how resources are shared between processes, and how hardware is exposed to processes. There's a bunch of other crud that's bundled into an "operating system" like your default packages, init scripts, daemons, configuration files, and so on. Containers try to replicate everything EXCEPT the kernel. When you run a container, it effectively shares a kernel with your host.
 
 Containers virtualize most of an environment, but containers still share a kernel with the host. Notably, hardware drivers, are typically loaded into the kernel, and so these are shared between the host and the container. If you want to make a hardware driver accessible inside a container, you normally need to first install it in your host, THEN make it available inside the container. This is exactly what we'll need to do for CUDA.
 
 ##### Optional step 1: Removing old versions on Linux
-If you run `nvidia-smi`, you can see what CUDA version you currently have installed at the top of the table that shows up. If that version is newer than 10.2, you'll need to uninstall it.
+If you run `nvidia-smi`, you can see what CUDA version you currently have installed at the top of the table that shows up. If that version is newer than 10.2, you'll need to uninstall it. If the command doesn't exist, don't worry about it.
 
 On Ubuntu, you can find your installed CUDA packages by running `apt list --installed cuda*`. You'll need to get rid of all of these if you have a newer version.
 
@@ -140,7 +140,7 @@ Skip down to the Installation instructions on this page: https://developer.nvidi
 - You can skip the rest of the steps. You'll run into problems with them anyway because you install CUDA Toolkit 10.2 instead of 11.0 as the guide expects.
 
 You can test your installation with the following command:
-- `docker run --rm --runtime=nvidia -ti nvidia/cuda:10.2-base nvidia-smi` (this runs nvidia-smi inside of a cuda:10.2-base container)
+- `docker run --rm --runtime=nvidia -it nvidia/cuda:10.2-base nvidia-smi` (this runs nvidia-smi inside of a cuda:10.2-base container)
 - At the top-right corner of the table, you should see "CUDA Version 10.2".
 
 # 4. What does SynthFlow do
@@ -149,7 +149,7 @@ You can test your installation with the following command:
 - Standardize container configuration so people can more easily replicate our workspaces. SynthFlow handles the boring work of setting up scripts and daemons, and it provides ways to customize the environment through hooks. The `build-data/spec` folders let you hook various parts of container image creation so you can install your own packages and run pre-install/post-install scripts without messing with the Dockerfile. I can add scripts to trigger when people, e.g., add new files or interact with the filesystem and AirFlow UI in various ways. All of these would be exposed to hooks you plug in.
 - Pre-install difficult-but-useful tools and keep them up-to-date. Right now, it comes with Nvidia Apex, PyTorch 1.6, Airflow 1.10.12, and PostgreSQL 10.14 running on Ubuntu 18.04. (At the time of writing, these are the latest versions supported based on PyTorch and AirFlow constraints.)
 
-You might have noticed that replication is a bit part of it. If we want anons extending our work, their starting point is to first replicate what we're doing. We've had a lot of issues with that on the preprocessing and AI side. This is a first attempt to broadly try fixing that problem.
+You might have noticed that replication is a big part of it. If we want anons extending our work, their starting point is to first replicate what we're doing. We've had a lot of issues with that on the preprocessing and AI side. This is a first attempt to broadly try fixing that problem.
 
 
 # 5. How is SynthFlow organized
