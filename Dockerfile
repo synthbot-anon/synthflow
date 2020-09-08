@@ -1,8 +1,5 @@
 from synthbot/synthflow-cuda10.2:latest
 
-# Default value for what additional setup to perform
-#ARG SPECIALIZATION
-
 # Make sure installation scripts don't ask for input
 ENV DEBIAN_FRONTEND=noninteractive
 
