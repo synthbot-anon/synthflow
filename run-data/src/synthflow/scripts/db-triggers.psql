@@ -2,7 +2,7 @@ CREATE EXTENSION plpython3u;
 
 CREATE FUNCTION onVariableChange() RETURNS TRIGGER AS $$
   import subprocess;
-  subprocess.run(['/data/src/synthflow/events/variable_update.py']);
+  subprocess.run(['/data/src/synthflow/events/airflow_variable_update.py']);
   return None;
 $$ LANGUAGE plpython3u;
 

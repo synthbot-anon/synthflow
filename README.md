@@ -11,7 +11,7 @@ If you're not familiar with Docker, please read the sections below in this order
 This is the expected workflow for replicating someone's workspace:
 1. Follow the installation steps below to set up Docker and CUDA.
 2. Clone this repository (`git clone https://github.com/synthbot-anon/synthflow.git`).
-3. Clone any target code into `run-data/src/` (e.g., `git clone --recursive https://github.com/CookiePPP/cookietts.git run-data/src/cookietts`)
+3. Clone any target code into `run-data/src/` (e.g., `git clone https://github.com/CookiePPP/cookietts.git run-data/src/cookietts`)
 4. Build the container with `./build WorkspaceNameGoesHere` (e.g., `./build cookietts`)
 5. Run the container with `./run`
 
