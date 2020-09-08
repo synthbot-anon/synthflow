@@ -1,4 +1,4 @@
-Cloning: `git clone --recursive https://github.com/synthbot-anon/synthflow.git`
+Cloning: `git clone https://github.com/synthbot-anon/synthflow.git`
 
 This project is part of the Please Please Pleese-get-a-life Foundation (PPP). It's intended to help organize our development efforts and make it easier for anons to replicate our work.
 
@@ -11,23 +11,18 @@ If you're not familiar with Docker, please read the sections below in this order
 
 This is the expected workflow for replicating someone's workspace:
 1. Follow the installation steps below to set up Docker and CUDA.
-2. Clone this repository (`git clone --recursive https://github.com/synthbot-anon/synthflow.git`).
-3. Clone any target code into `run-data/src/` (e.g., `git clone --recursive https://github.com/CookiePPP/cookietts.git run-data/src/cookietts run-data/src`)
-4. Run `./run WorkspaceNameGoesHere`
+2. Clone this repository (`git clone https://github.com/synthbot-anon/synthflow.git`).
+3. Clone any target code into `run-data/src/` (e.g., `git clone --recursive https://github.com/CookiePPP/cookietts.git run-data/src/cookietts`)
+4. Build the container with `./build WorkspaceNameGoesHere` (e.g., `./build cookietts`)
+5. Run the container with `./run`
 
 The entire `run-data` directory will be available in the workspace in `/data`. Once this workspace is running, you can run the scripts in `utils/` to get a new shell, get a root shell, start a Jupyter notebook server, and start an AirFlow server. See the *What does SynthFlow do* section below.
 
 This is the expected workflow for creating a custom workspace:
-1. Copy `build-data/spec/baseline` in a new folder `build-data/spec/NewNameGoesHere`
-2. Modify the newly-created files to specify what packages you want and what scripts you want to run before installation
-3. Run `./build NewNameGoesHere`.
-4. Move your code to `run-data/src/RepoNameGoesHere`.
-
-This is the expected workflow for sharing a custom workspace:
-1. Push your custom code in `run-data/src/RepoNameGoesHere` to github.
-2. Push your container image to dockerhub.
-3. Post your container customization scripts (in `build-data/spec/`) to the thread so people can build on it.
-
+1. Move your code to `run-data/src/RepoNameGoesHere`.
+2. Copy the files from `run-data/src/template` into your repository. This should add a `container` directory in your repo.
+3. Modify the newly-created files to specify what packages you want and what scripts you want to run before installation.
+4. Run `./build RepoNameGoesHere`.
 
 # 1. What can containers do
 Containers solve the problem of replicating working environments. Normally when other people try to run your code, you need to worry about what operating system they're using, what packages and libraries they've installed, what else might be running alongside your program that might interfere, files and folders on the filesystem, and so on. Containers simplify all of that by letting you specify all of this. Your code will get a virtual view of all of this so it can act as if it's running in a perfectly controlled environment.
@@ -144,19 +139,18 @@ You can test your installation with the following command:
 - At the top-right corner of the table, you should see "CUDA Version 10.2".
 
 # 4. What does SynthFlow do
-- Push our preprocessing code towards a standardized flow to make them more replicable and reusable. I'll keep extending SynthFlow to support more of the preprocessing work we do. The "standardized flow" would be AirFlow's notion of DAGs. Chunks of preprocessing would be split off into tasks so they can be reused. A DAG would coordinate running sequences of tasks with dependencies.
+- Push our preprocessing code towards a standardized flow to make them more replicable and reusable. I'll keep extending SynthFlow to support more of the preprocessing work we do. The "standardized flow" will probably be AirFlow's notion of DAGs. Chunks of preprocessing would be split off into tasks so they can be reused. A DAG would coordinate running sequences of tasks with dependencies.
 - Make it easier for anons to replicate our workflows. AirFlow provides a web interface for running dags and viewing results. Although it's still a bit involved, anons can re-run our preprocessing code on their own data using the web interface. This would help them get familiar with what we're doing before they (hopefully) start mucking around with the code. As we find out more on how we (i.e., Cookie) is developing the ML scripts, I can find ways to make those more replicable, reusable, and scalable.
-- Standardize container configuration so people can more easily replicate our workspaces. SynthFlow handles the boring work of setting up scripts and daemons, and it provides ways to customize the environment through hooks. The `build-data/spec` folders let you hook various parts of container image creation so you can install your own packages and run pre-install/post-install scripts without messing with the Dockerfile. I can add scripts to trigger when people, e.g., add new files or interact with the filesystem and AirFlow UI in various ways. All of these would be exposed to hooks you plug in.
-- Pre-install difficult-but-useful tools and keep them up-to-date. Right now, it comes with Nvidia Apex, PyTorch 1.6, Airflow 1.10.12, and PostgreSQL 10.14 running on Ubuntu 18.04. (At the time of writing, these are the latest versions supported based on PyTorch and AirFlow constraints.)
+- Standardize container configuration so people can more easily replicate our workspaces. SynthFlow handles the boring work of setting up scripts and daemons, and it provides ways to customize the environment through hooks. The `container` folders let you hook various parts of container image creation so you can install your own packages and run pre-install/post-install scripts without messing with the Dockerfile. I can add scripts to trigger when people, e.g., add new files or interact with the filesystem and AirFlow UI in various ways. All of these would be exposed to hooks you plug in.
+- Pre-install tools and keep them up-to-date. Right now, it comes with Nvidia Apex, PyTorch 1.6, Airflow 1.10.12, and PostgreSQL 10.14 running on Ubuntu 18.04. (At the time of writing, these are the latest versions supported based on PyTorch and AirFlow constraints.)
 
-You might have noticed that replication is a big part of it. If we want anons extending our work, their starting point is to first replicate what we're doing. We've had a lot of issues with that on the preprocessing and AI side. This is a first attempt to broadly try fixing that problem.
-
+Replication is a big part of it. If we want anons extending our work, their starting point is to first replicate what we're doing. We've had a lot of issues with that on the preprocessing and AI side. This is a first attempt to broadly try fixing that problem.
 
 # 5. How is SynthFlow organized
 SynthFlow contains scripts for building and running containers. These containers can be customized through hooks. SynthFlow contains these files:
 - `Dockerfile` - This tells Docker how to build new container images. If you need to modify this file, please tell me. Eventually, I'd like to get to the point where we never need to modify this.
-- `build-data/` - This folder contains any files needed to build container images. For the most part, that means a list of packages to install plus pre-installation/post-installation scripts. The `build-data/spec` folder contains information on how to specialize a container for, e.g., Cookie's workspace. The `build-data/spec/baseline` folder is a template for creating new specialized workspaces.
-- `build` - This is a script to create new container images. You can create a new image by running `build name-goes-here`. The `name-goes-here` is used as a folder name in `build-data/spec/`. It's also used to name the image `synthflow-name-goes-here`.
+- `build-data/` - This folder mirrors any files needed to build container images. This includes files from `container/` folders in whatever's being built. Files are copied into here when building a new container.
+- `build` - This is a script to create new container images. You can create a new image by running `build name-goes-here`. The `name-goes-here` is used as a folder name in `run-data/src/`. That folder is expected to contain a `container/` folder that specifies packages to install and any pre/post installation scripts.
 - `run-data/` - This is the shared folder between the host and the container. Inside the container, this folder is exposed as `/data`. It comes pre-populated with a few folders described below.
 - `run-data/airflow` - This contains AirFlow configuration information.
 - `run-data/downloaded` - Users are expected to drop their own datasets into this folder. Scripts should NOT modify anything in this directory.
@@ -164,5 +158,5 @@ SynthFlow contains scripts for building and running containers. These containers
 - `run-data/generated` - Your scripts can use this as scratch space for any intermediate data.
 - `run-data/src` - Any of your own code should go into this directory. You can expect users to `git clone` your repository into this folder.
 - `utils/` - This contains utility scripts for working with a running container. There's a script for running a shell, for running a root shell, for starting the AirFlow webserver, and for starting a Jupyter notebook server.
-- `run` - This is a script for running a container. For example, after running `./build cookie`, the `./run cookie` command will run a workspace with the `build-data/spec/cookie` customizations. This `run` script exposes any GPUs to your container, sets up the CUDA driver if neccessary, mounts the `run-data` directory, and exposes the ports necessary for AirFlow and Jupyter.
+- `run` - This is a script for running a container. For example, after running `./build cookietts`, the `./run` command will run a workspace with the `run-data/src/cookietts/container` customizations. This `run` script exposes any GPUs to your container, sets up the CUDA driver if neccessary, mounts the `run-data` directory, and exposes the ports necessary for AirFlow and Jupyter.
 
