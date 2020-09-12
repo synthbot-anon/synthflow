@@ -55,7 +55,7 @@ Try running these commands in the shell that's now inside the `ubuntu:latest` co
 * `adduser --disabled-password --gecos "" celestia` (create user `celestia`)
 * `su celestia` (switch to user `celestia`)
 * `exit` (switch back to the root shell)
-* `rm -rf /usr` (delete the `/usr` folder, which contains pretty much everything)
+* `rm -rf /usr` (delete the `/usr` folder inside the container, which contains pretty much everything)
 * `ls` (command not found, since you just deleted it)
 * `exit` (leave the main shell, thus closing the container)
 * `docker run --rm -it ubuntu:latest` (start the container again)
@@ -73,7 +73,7 @@ You can persist files by sharing them with the containers you run. Here's an exa
 ### Creating new container images
 One of the nice things about containers is that you can modify the environment, then save the result as a new container image. We can play around in one container:
 * `docker run --rm -it ubuntu:latest`
-* `echo 'acute' > /sunset`
+* `echo 'acute horse syndrome' > /sunset`
 
 Now while this container is running, open a separate shell and run the following:
 * `docker container ls` (this will list the running containers alongside the container id)
@@ -94,7 +94,7 @@ Here's my typical setup:
 - I have one shared directory (`run-data`) between the host and the container. My code goes in that shared directory, as does any data I want to persist across container runs.
 - Since my code is in the shared directory, I can edit it using my usual IDE and shell tools. The updates are automatically reflected inside the container.
 - Whenever I need to install a new package, I figure out how to get it working inside the container, then I add the corresponding steps to my `Dockerfile`.
-- I forward a container port for Jupyter and any other daemons I want to access from my browser. This is done in the `run` script.
+- I port-forward Jupyter and any other daemons to my host computer so I can access them from my browser. By default, nothing that happens inside of a container is accessible outside of it, so these ports need to be exposed explicitly. For security reasons, I only make these available on my host and not to the internet. This is done in the `run` script.
 - I create scripts to wrap any `docker build` and `docker run` commands. These are in `build`, `run`, and `utils/`.
 
 Killing and restarting a container takes seconds, so it's not a big deal. Building a new custom container usually takes a while (a few minutes), so I kick off a build as soon as I update my `Dockerfile`. You can kick off a build without closing the existing container.
@@ -111,14 +111,16 @@ NOTE: This section is written for Linux users. I don't know how to get this work
 
 Your operating system runs as several components. The kernel is the "core" of the operating system. It defines how processes interact, how resources are shared between processes, and how hardware is exposed to processes. There's a bunch of other crud that's bundled into an "operating system" like your default packages, init scripts, daemons, configuration files, and so on. Containers try to replicate everything EXCEPT the kernel. When you run a container, it effectively shares a kernel with your host.
 
-Containers virtualize most of an environment, but containers still share a kernel with the host. Notably, hardware drivers, are typically loaded into the kernel, and so these are shared between the host and the container. If you want to make a hardware driver accessible inside a container, you normally need to first install it in your host, THEN make it available inside the container. This is exactly what we'll need to do for CUDA.
+Containers virtualize most of an environment, but containers still share a kernel with the host. Notably, hardware drivers are typically loaded into the kernel, and so these are shared between the host and the container. If you want to make a hardware driver accessible inside a container, you normally need to first install it in your host, THEN make it available inside the container. This is exactly what we'll need to do for CUDA.
 
-##### Optional step 1: Removing old versions on Linux
-If you run `nvidia-smi`, you can see what CUDA version you currently have installed at the top of the table that shows up. If that version is newer than 10.2, you'll need to uninstall it. If the command doesn't exist, don't worry about it.
+##### Optional step 1: Removing previous versions on Linux
+If you run `nvidia-smi`, you can see what CUDA version you currently have installed at the top of the table that shows up. Only newer versions will interfere with a 10.2 installation, so if that version is older than or equal to than 10.2, you can skip this step. Otherwise you'll need to uninstall it. If the command doesn't exist, then you can also skip this step since that means you don't have CUDA Toolkit installed.
 
 On Ubuntu, you can find your installed CUDA packages by running `apt list --installed cuda*`. You'll need to get rid of all of these if you have a newer version.
 
 ##### Step 2: Installing CUDA Toolkit 10.2 on Linux
+If you alrady have CUDA Toolkit 10.2 installed, you can skip this step.
+
 You can install CUDA Toolkit from here: https://developer.nvidia.com/cuda-10.2-download-archive. Make sure you're installing CUDA Toolkit 10.2 since that's that latest version currently supported by PyTorch.
 
 On Linux if you have the option, use the installer that integrate nicely with your package manager. For example, use the deb package on Ubuntu.
@@ -131,7 +133,7 @@ Skip down to the Installation instructions on this page: https://developer.nvidi
 - Update the apt package list (using `apt-get update`) so it fetches the new information.
 - Install nvidia-docker.
 - Restart the dockerd daemon.
-- You can skip the rest of the steps. You'll run into problems with them anyway because you install CUDA Toolkit 10.2 instead of 11.0 as the guide expects.
+- You can skip the rest of the steps. You'll run into problems with them anyway because you've install CUDA Toolkit 10.2 instead of 11.0 as the guide expects.
 
 You can test your installation with the following command:
 - `docker run --rm --runtime=nvidia -it nvidia/cuda:10.2-base nvidia-smi` (this runs nvidia-smi inside of a cuda:10.2-base container)
